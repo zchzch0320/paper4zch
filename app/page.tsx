@@ -155,15 +155,15 @@ const fallbackPapers: Paper[] = [
 const filters = [
   { id: "all", label: "全部" },
   { id: "conference", label: "三大会中稿" },
-  { id: "arxiv", label: "arXiv 精选" },
+  { id: "arxiv", label: "arXiv 初筛" },
   { id: "safe", label: "安全与约束" },
   { id: "multi", label: "多智能体博弈" },
   { id: "theory", label: "函数逼近 / 理论" },
 ];
 
-function readStoredSet(key: string) {
+function readStoredSet(key: string, legacyKey?: string) {
   try {
-    return new Set<string>(JSON.parse(localStorage.getItem(key) || "[]"));
+    return new Set<string>(JSON.parse(localStorage.getItem(key) || (legacyKey ? localStorage.getItem(legacyKey) : null) || "[]"));
   } catch {
     return new Set<string>();
   }
@@ -178,15 +178,17 @@ export default function Home() {
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [read, setRead] = useState<Set<string>>(new Set());
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  const [generatedAt, setGeneratedAt] = useState("2026-08-06T16:00:00+08:00");
 
   useEffect(() => {
-    setSaved(readStoredSet("paper2z-saved"));
-    setRead(readStoredSet("paper2z-read"));
-    setDismissed(readStoredSet("paper2z-dismissed"));
+    setSaved(readStoredSet("paper4zch-saved", "paper2z-saved"));
+    setRead(readStoredSet("paper4zch-read", "paper2z-read"));
+    setDismissed(readStoredSet("paper4zch-dismissed", "paper2z-dismissed"));
     fetch(new URL("recommendations.json", document.baseURI))
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("digest unavailable")))
       .then((digest) => {
         if (Array.isArray(digest.papers) && digest.papers.length) setPapers(digest.papers as Paper[]);
+        if (digest.generatedAt) setGeneratedAt(digest.generatedAt);
       })
       .catch(() => undefined);
   }, []);
@@ -199,19 +201,19 @@ export default function Home() {
     const next = new Set(saved);
     next.has(id) ? next.delete(id) : next.add(id);
     setSaved(next);
-    persist("paper2z-saved", next);
+    persist("paper4zch-saved", next);
   }
 
   function markRead(id: string) {
     const next = new Set(read).add(id);
     setRead(next);
-    persist("paper2z-read", next);
+    persist("paper4zch-read", next);
   }
 
   function dismiss(id: string) {
     const next = new Set(dismissed).add(id);
     setDismissed(next);
-    persist("paper2z-dismissed", next);
+    persist("paper4zch-dismissed", next);
   }
 
   const visiblePapers = useMemo(() => {
@@ -230,18 +232,28 @@ export default function Home() {
     return selected.sort((a, b) => sort === "newest" ? b.publishedAt.localeCompare(a.publishedAt) : b.score - a.score);
   }, [activeFilter, dismissed, papers, query, sort]);
 
+  const generatedLabel = useMemo(() => new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(generatedAt)).replaceAll("/", "."), [generatedAt]);
+
   return (
     <main>
       <header className="masthead">
-        <a className="brand" href="#top" aria-label="Paper2Z 首页">
-          <span className="brand-mark">P2Z</span>
-          <span>Paper2Z</span>
+        <a className="brand" href="#top" aria-label="Paper4ZCH 首页">
+          <span className="brand-mark">P4Z</span>
+          <span>Paper4ZCH</span>
         </a>
         <div className="masthead-meta">
           <span className="live-dot" />
           每日研究雷达
           <span className="meta-divider" />
-          2026.08.06 · 16:00 CST
+          {generatedLabel} CST
         </div>
       </header>
 
@@ -251,7 +263,7 @@ export default function Home() {
           <h1>今天真正值得你读的<br /><em>8 篇新论文</em></h1>
           <p className="hero-lede">
             根据最近 800 条文献元数据建立兴趣画像，只读近一年 ICLR、ICML、NeurIPS 主会中稿，
-            以及通过严格质量门槛的 arXiv 新稿，再按相关性、新鲜度与研究质量排序。
+            以及通过公开摘要证据自动初筛的 arXiv 新稿，再按相关性、新鲜度与研究信号排序。
           </p>
           <div className="hero-actions">
             <a className="primary-action" href="#digest">开始浏览 <span>↓</span></a>
@@ -289,7 +301,7 @@ export default function Home() {
             <p className="section-index">01 / 今日文献</p>
             <h2>高匹配推荐</h2>
           </div>
-          <p className="digest-note">范围：近 365 天；会议仅 ICLR / ICML / NeurIPS 主会中稿。arXiv 为质量筛选，不代表录用预测。</p>
+          <p className="digest-note">范围：近 365 天；会议仅保留已核验的 ICLR / ICML / NeurIPS 主会中稿。新增 arXiv 为免费云端自动初筛，不代表录用或完整质量评审。</p>
         </div>
 
         <div className="controls" aria-label="论文筛选">
@@ -329,7 +341,7 @@ export default function Home() {
                 <div className="paper-rank">{String(index + 1).padStart(2, "0")}</div>
                 <div className="paper-main">
                   <div className="paper-kicker">
-                    <span className={`status ${paper.status}`}>{paper.status === "conference" ? "三大会" : "arXiv 精选"}</span>
+                    <span className={`status ${paper.status}`}>{paper.status === "conference" ? "三大会" : "arXiv 初筛"}</span>
                     <span>{paper.source}</span>
                     {read.has(paper.id) && <span className="read-label">已读</span>}
                   </div>
@@ -390,7 +402,7 @@ export default function Home() {
             <span>⌁</span>
             <h3>这个筛选下暂时没有论文</h3>
             <p>换一个主题，或恢复已隐藏的推荐。</p>
-            <button onClick={() => { const empty = new Set<string>(); setActiveFilter("all"); setQuery(""); setDismissed(empty); persist("paper2z-dismissed", empty); }}>恢复全部</button>
+            <button onClick={() => { const empty = new Set<string>(); setActiveFilter("all"); setQuery(""); setDismissed(empty); persist("paper4zch-dismissed", empty); }}>恢复全部</button>
           </div>
         )}
       </section>
@@ -402,15 +414,15 @@ export default function Home() {
         </div>
         <div className="method-grid">
           <div><span>01</span><h3>兴趣画像</h3><p>近期保存、重复主题与显式标签权重更高；收藏不被误当作绝对偏好。</p></div>
-          <div><span>02</span><h3>顶会边界</h3><p>仅保留近一年三大会主会中稿；arXiv 需通过五维质量门槛，且绝不冒充录用结果。</p></div>
+          <div><span>02</span><h3>来源边界</h3><p>仅保留近一年已核验的三大会主会中稿；新增 arXiv 依据摘要中的理论与实验证据自动初筛，绝不冒充录用结果。</p></div>
           <div><span>03</span><h3>去重排序</h3><p>排除 Zotero 已有标题，并在相关性、新鲜度、理论密度与主题多样性间平衡。</p></div>
         </div>
       </section>
 
       <footer>
-        <div><span className="brand-mark small">P2Z</span><strong>Paper2Z Literature Radar</strong></div>
-        <p>自动检查 · 每 3 小时一次（北京时间）</p>
-        {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper2z-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
+        <div><span className="brand-mark small">P4Z</span><strong>Paper4ZCH Literature Radar</strong></div>
+        <p>GitHub 云端自动检查 · 每天一次（北京时间约 08:17）</p>
+        {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper4zch-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
       </footer>
     </main>
   );
