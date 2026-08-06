@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fetch social preview image
-        run: curl --fail --location https://paper2z-radar.zhouchenhao0320.chatgpt.site/og.png --output public/og.png
-
       - name: Build static site
         run: npm run build:pages
 
