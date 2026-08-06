@@ -1,6 +1,6 @@
 ---
 name: zotero-literature-radar
-description: Build personalized academic-paper recommendations from a Zotero library or Zotero export, restricted to accepted ICLR, ICML, and NeurIPS main-track papers from the latest rolling year plus rigorously screened top-tier-quality arXiv preprints from the same period. Deduplicate and rank candidates, produce evidence-grounded Chinese summaries, and prepare daily digest data for a website or recurring automation. Use when Codex needs to inspect Zotero research interests, recommend recent top-tier ML papers, summarize a literature feed, or refresh the paper2z daily literature-radar site.
+description: Build personalized academic-paper recommendations from a Zotero library or public derived profile, restricted to accepted ICLR, ICML, and NeurIPS main-track papers from the latest rolling year plus clearly labeled arXiv candidates from the same period. Deduplicate and rank candidates, produce evidence-grounded summaries, and prepare daily digest data for the Paper4ZCH website or cloud automation.
 ---
 
 # Zotero Literature Radar
@@ -39,8 +39,8 @@ Create a compact, high-precision daily paper feed from the user's actual reading
    - Link each card directly to its primary source.
    - Show the retrieval date and label items as `conference`, `arxiv`, `under-review`, or `workshop` only when verified.
 7. Refresh automatically.
-   - For this project, schedule a daily local project automation after the first successful site build and deployment.
-   - Have the automation invoke this skill, refresh the digest data, run validation, and publish only when validation succeeds.
+   - For this project, use the daily GitHub Actions workflow and the public derived profile so refreshes do not require the user's computer or Codex.
+   - Run the deterministic cloud refresh, validation, static build, and Pages deployment; publish only when validation succeeds.
    - Preserve the previous valid digest if retrieval, summarization, build, or deployment fails.
 
 ## Source and status rules
