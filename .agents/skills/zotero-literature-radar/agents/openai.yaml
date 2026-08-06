@@ -1,0 +1,5 @@
+interface:
+  display_name: "Zotero �����״�"
+  short_description: "�� Zotero ��Ȥ��ɸѡ�������ܽ�����ѧ������"
+  default_prompt: "ʹ�� $zotero-literature-radar �����ҵ� Zotero ���׿����ɽ����������Ƽ��������ܽᡣ"
+
