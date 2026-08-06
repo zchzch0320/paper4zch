@@ -7,8 +7,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("host") || "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Paper2Z · 每日文献雷达";
-  const description = "根据 Zotero 兴趣画像，每日筛选近一年 ICLR、ICML、NeurIPS 主会中稿与高质量 arXiv 新论文。";
+  const title = "Paper4ZCH · 每日文献雷达";
+  const description = "根据公开 Zotero 衍生兴趣画像，每日筛选近一年三大会中稿并自动初筛 arXiv 新论文。";
 
   return {
     title,
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       type: "website",
       locale: "zh_CN",
-      images: [{ url: `${origin}/og.png`, width: 1744, height: 913, alt: "Paper2Z Daily Literature Radar" }],
+      images: [{ url: `${origin}/og.png`, width: 1744, height: 913, alt: "Paper4ZCH Daily Literature Radar" }],
     },
     twitter: {
       card: "summary_large_image",
