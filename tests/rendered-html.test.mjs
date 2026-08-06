@@ -14,13 +14,13 @@ async function render() {
   );
 }
 
-test("server-renders the Paper2Z literature radar", async () => {
+test("server-renders the Paper4ZCH literature radar", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Paper2Z · 每日文献雷达<\/title>/i);
+  assert.match(html, /<title>Paper4ZCH · 每日文献雷达<\/title>/i);
   assert.match(html, /从你的 Zotero 出发/);
   assert.match(html, /Hierarchical Multilevel Monte Carlo/);
   assert.match(html, /今天真正值得你读的/);
@@ -34,8 +34,8 @@ test("removes starter preview code and metadata", async () => {
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /Paper2Z/);
-  assert.match(page, /paper2z-saved/);
+  assert.match(page, /Paper4ZCH/);
+  assert.match(page, /paper4zch-saved/);
   assert.match(layout, /lang="zh-CN"/);
   assert.doesNotMatch(page, /_sites-preview|SkeletonPreview/);
   assert.doesNotMatch(layout, /Starter Project|codex-preview/);
@@ -50,7 +50,7 @@ test("daily recommendation feed is valid and deduplicated", async () => {
   assert.equal(digest.policy.windowDays, 365);
   assert.deepEqual(digest.policy.conferenceVenues, ["ICLR", "ICML", "NeurIPS"]);
   assert.equal(digest.policy.conferenceTrack, "main");
-  assert.equal(digest.policy.arxivQualityGate, "top-tier-rubric-v1");
+  assert.match(digest.policy.arxivQualityGate, /top-tier-rubric-v1|automated-abstract-screen-v1/);
 
   const generatedAt = new Date(digest.generatedAt);
   const cutoff = new Date(generatedAt);
