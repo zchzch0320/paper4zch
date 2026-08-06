@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
+  group: daily-paper4zch-refresh
   cancel-in-progress: false
 
 jobs:
