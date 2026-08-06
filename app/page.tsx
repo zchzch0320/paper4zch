@@ -409,7 +409,7 @@ export default function Home() {
 
       <footer>
         <div><span className="brand-mark small">P2Z</span><strong>Paper2Z Literature Radar</strong></div>
-        <p>下一次自动更新 · 明天 08:00 CST</p>
+        <p>自动检查 · 每 3 小时一次（北京时间）</p>
         {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper2z-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
       </footer>
     </main>
