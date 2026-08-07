@@ -5,6 +5,8 @@ Write UTF-8 JSON with this top-level shape:
 ```json
 {
   "generatedAt": "ISO-8601 timestamp",
+  "checkedAt": "ISO-8601 timestamp",
+  "recommendationsChanged": false,
   "policy": {
     "windowDays": 365,
     "conferenceVenues": ["ICLR", "ICML", "NeurIPS"],
@@ -45,6 +47,8 @@ Each `papers` entry must contain:
 
 Requirements:
 
+- `generatedAt` records when the selected recommendation set last changed; `checkedAt` records the latest successful cloud check.
+- Set `recommendationsChanged` to `true` only when the selected paper IDs or their ranking changed in the latest successful check.
 - Sort descending by `score`, then `publishedAt`.
 - Keep `score` within 0–100.
 - Reject papers outside the rolling window encoded by `policy.windowDays`.

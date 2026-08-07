@@ -8,6 +8,8 @@ test("builds a deployable GitHub Pages artifact", async () => {
   assert.match(html, /<title>Paper4ZCH · 每日文献雷达<\/title>/);
   assert.match(html, /\/paper4zch\/assets\//);
   assert.equal(feed.policy.windowDays, 365);
+  assert.ok(Date.parse(feed.checkedAt));
+  assert.equal(typeof feed.recommendationsChanged, "boolean");
   assert.ok(feed.papers.length > 0);
 });
 

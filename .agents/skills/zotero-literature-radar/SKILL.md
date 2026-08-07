@@ -39,7 +39,9 @@ Create a compact, high-precision daily paper feed from the user's actual reading
    - Link each card directly to its primary source.
    - Show the retrieval date and label items as `conference`, `arxiv`, `under-review`, or `workshop` only when verified.
 7. Refresh automatically.
-   - For this project, use the daily GitHub Actions workflow and the public derived profile so refreshes do not require the user's computer or Codex.
+   - For this project, use the GitHub Actions retry schedule and the public derived profile so refreshes do not require the user's computer or Codex.
+   - Attempt at several distributed cloud time slots, but use the Beijing calendar date in `checkedAt` to publish at most once after the first successful check that day.
+   - Keep `generatedAt` as the time the recommendation set last changed. Update `checkedAt` after every successful daily check and set `recommendationsChanged` truthfully so the site can distinguish a fresh unchanged check from a stale feed.
    - Run the deterministic cloud refresh, validation, static build, and Pages deployment; publish only when validation succeeds.
    - Preserve the previous valid digest if retrieval, summarization, build, or deployment fails.
 

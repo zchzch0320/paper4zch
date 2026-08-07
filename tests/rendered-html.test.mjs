@@ -45,6 +45,8 @@ test("removes starter preview code and metadata", async () => {
 test("daily recommendation feed is valid and deduplicated", async () => {
   const digest = JSON.parse(await readFile(new URL("../public/recommendations.json", import.meta.url), "utf8"));
   assert.ok(Date.parse(digest.generatedAt));
+  assert.ok(Date.parse(digest.checkedAt));
+  assert.equal(typeof digest.recommendationsChanged, "boolean");
   assert.ok(digest.profile.paperCount > 0);
   assert.ok(digest.papers.length >= 5 && digest.papers.length <= 8);
   assert.equal(digest.policy.windowDays, 365);

@@ -179,6 +179,8 @@ export default function Home() {
   const [read, setRead] = useState<Set<string>>(new Set());
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [generatedAt, setGeneratedAt] = useState("2026-08-06T16:00:00+08:00");
+  const [checkedAt, setCheckedAt] = useState("2026-08-06T16:00:00+08:00");
+  const [recommendationsChanged, setRecommendationsChanged] = useState(false);
 
   useEffect(() => {
     setSaved(readStoredSet("paper4zch-saved", "paper2z-saved"));
@@ -189,6 +191,8 @@ export default function Home() {
       .then((digest) => {
         if (Array.isArray(digest.papers) && digest.papers.length) setPapers(digest.papers as Paper[]);
         if (digest.generatedAt) setGeneratedAt(digest.generatedAt);
+        if (digest.checkedAt) setCheckedAt(digest.checkedAt);
+        if (typeof digest.recommendationsChanged === "boolean") setRecommendationsChanged(digest.recommendationsChanged);
       })
       .catch(() => undefined);
   }, []);
@@ -242,6 +246,16 @@ export default function Home() {
     hour12: false,
   }).format(new Date(generatedAt)).replaceAll("/", "."), [generatedAt]);
 
+  const checkedLabel = useMemo(() => new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(checkedAt)).replaceAll("/", "."), [checkedAt]);
+
   return (
     <main>
       <header className="masthead">
@@ -253,7 +267,7 @@ export default function Home() {
           <span className="live-dot" />
           每日研究雷达
           <span className="meta-divider" />
-          {generatedLabel} CST
+          最后检查 {checkedLabel} CST
         </div>
       </header>
 
@@ -296,6 +310,11 @@ export default function Home() {
       </section>
 
       <section className="digest" id="digest">
+        <div className={`refresh-status ${recommendationsChanged ? "changed" : "unchanged"}`} role="status">
+          <span className="refresh-status-dot" />
+          <strong>{recommendationsChanged ? "今日推荐已更新" : "今日无更优新论文"}</strong>
+          <small>最后检查 {checkedLabel} CST · 当前推荐更新于 {generatedLabel} CST</small>
+        </div>
         <div className="digest-head">
           <div>
             <p className="section-index">01 / 今日文献</p>
@@ -421,7 +440,7 @@ export default function Home() {
 
       <footer>
         <div><span className="brand-mark small">P4Z</span><strong>Paper4ZCH Literature Radar</strong></div>
-        <p>GitHub 云端自动检查 · 每天一次（北京时间约 08:17）</p>
+        <p>GitHub 云端重试：08:17 / 12:17 / 16:17 / 20:17 · 每日成功发布一次</p>
         {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper4zch-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
       </footer>
     </main>

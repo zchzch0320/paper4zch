@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const digestPath = resolve(projectRoot, "public", "recommendations.json");
 const DAY_MS = 86_400_000;
+const BEIJING_OFFSET_MS = 8 * 60 * 60 * 1000;
 
 const TOPIC_RULES = [
   { name: "安全 / CMDP", terms: ["constrained reinforcement", "safe reinforcement", "cmdp", "constraint violation", "primal-dual"] },
@@ -22,6 +23,17 @@ const EVIDENCE_TERMS = [
 
 export function normalizeWhitespace(value = "") {
   return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+export function beijingDateKey(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (!Number.isFinite(date.getTime())) return null;
+  return new Date(date.getTime() + BEIJING_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+export function shouldRefreshToday(previous, now = new Date()) {
+  const lastSuccessfulCheck = previous.checkedAt ?? previous.generatedAt;
+  return beijingDateKey(lastSuccessfulCheck) !== beijingDateKey(now);
 }
 
 export function decodeXml(value = "") {
@@ -131,9 +143,15 @@ export function buildDigest(previous, fetched, now = new Date()) {
   const selected = [...preferred, ...all.filter((paper) => !preferredIds.has(paper.id))]
     .sort((a, b) => b.score - a.score || b.publishedAt.localeCompare(a.publishedAt))
     .slice(0, 8);
+  const previousIds = previous.papers.map((paper) => paper.id);
+  const selectedIds = selected.map((paper) => paper.id);
+  const recommendationsChanged = previousIds.length !== selectedIds.length
+    || previousIds.some((id, index) => id !== selectedIds[index]);
 
   return {
-    generatedAt: now.toISOString(),
+    generatedAt: recommendationsChanged ? now.toISOString() : (previous.generatedAt ?? now.toISOString()),
+    checkedAt: now.toISOString(),
+    recommendationsChanged,
     policy: {
       windowDays: 365,
       conferenceVenues: ["ICLR", "ICML", "NeurIPS"],
@@ -147,6 +165,7 @@ export function buildDigest(previous, fetched, now = new Date()) {
 
 export function validateDigest(digest, now = new Date(digest.generatedAt)) {
   if (!Date.parse(digest.generatedAt) || !digest.profile || !Array.isArray(digest.papers) || digest.papers.length < 5 || digest.papers.length > 8) throw new Error("invalid digest shape");
+  if (!Date.parse(digest.checkedAt) || typeof digest.recommendationsChanged !== "boolean") throw new Error("invalid refresh status");
   const cutoff = new Date(now.getTime() - 365 * DAY_MS);
   const titles = new Set();
   for (const paper of digest.papers) {
