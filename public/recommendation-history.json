@@ -1,57 +1,26 @@
 {
-  "generatedAt": "2026-08-07T01:59:54.411Z",
-  "checkedAt": "2026-08-07T02:02:18.914Z",
-  "recommendationsChanged": false,
-  "rotation": {
-    "targetMin": 3,
-    "targetMax": 5,
-    "replacedCount": 1,
-    "newPaperIds": [
-      "2608.02951"
-    ],
-    "historyWindowDays": 7,
-    "qualityFloor": 80,
-    "insufficientNewPapers": true
-  },
-  "policy": {
-    "windowDays": 365,
-    "conferenceVenues": [
-      "ICLR",
-      "ICML",
-      "NeurIPS"
-    ],
-    "conferenceTrack": "main",
-    "arxivQualityGate": "automated-abstract-screen-v1"
-  },
-  "profile": {
-    "paperCount": 800,
-    "uniqueTitleCount": 745,
-    "latestSave": "2026-08-03",
-    "summary": "多智能体强化学习、Actor–Critic、表示学习与线性函数逼近、安全/约束 RL、低秩 MDP、分布鲁棒 RL 与 RLHF 理论",
-    "topics": [
-      {
-        "name": "多智能体 RL",
-        "weight": 1
-      },
-      {
-        "name": "Actor–Critic",
-        "weight": 0.83
-      },
-      {
-        "name": "线性函数逼近",
-        "weight": 0.72
-      },
-      {
-        "name": "安全 / CMDP",
-        "weight": 0.61
-      },
-      {
-        "name": "分布鲁棒",
-        "weight": 0.54
-      }
-    ]
-  },
-  "papers": [
+  "windowDays": 7,
+  "retentionDays": 30,
+  "entries": [
+    {
+      "date": "2026-08-07",
+      "paperIds": [
+        "2607.28390",
+        "2608.03562",
+        "2605.03125",
+        "2604.03891",
+        "2605.19235",
+        "EHs3tSukHC",
+        "1SdPgRQrr5",
+        "a19MA0ksbc",
+        "2608.02951"
+      ],
+      "introducedIds": [
+        "2608.02951"
+      ]
+    }
+  ],
+  "catalog": [
     {
       "id": "2607.28390",
       "title": "Hierarchical Multilevel Monte Carlo for Order-Optimal Neural Actor-Critic in Average-Reward CMDPs",
@@ -218,6 +187,34 @@
       "why": "适合与你熟悉的期望型 CMDP / primal–dual 方法并排阅读，比较“约束预算”与“可达/始终避障”两类安全语义。",
       "caveat": "它解决的是特定 threshold-satisfaction 语义，不能直接替代一般累计期望约束 CMDP。",
       "primaryUrl": "https://openreview.net/forum?id=1SdPgRQrr5"
+    },
+    {
+      "id": "a19MA0ksbc",
+      "title": "DR-SAC: Distributionally Robust Soft Actor-Critic for Reinforcement Learning under Uncertainty",
+      "authors": [
+        "Mingxuan Cui",
+        "Duo Zhou",
+        "Yuxuan Han",
+        "Grani A. Hanasusanto",
+        "Qiong Wang",
+        "Huan Zhang",
+        "Zhengyuan Zhou"
+      ],
+      "source": "ICLR 2026 · Poster",
+      "status": "conference",
+      "publishedAt": "2026-01-26",
+      "score": 88,
+      "topics": [
+        "分布鲁棒",
+        "离线 RL",
+        "Actor–Critic"
+      ],
+      "thesis": "把 KL 不确定集合下的分布鲁棒软策略迭代扩展到连续动作 actor–critic，并面向离线数据估计名义转移。",
+      "method": "DR-SAC 优化最坏转移模型下的熵正则回报，推导 robust soft policy iteration 及其收敛性质，并以生成模型从离线数据估计未知 nominal dynamics。",
+      "evidence": "ICLR 官方页面报告在五个连续控制任务上，常见扰动下平均回报最高达到 SAC 基线的 9.8 倍，同时改善相较既有 DR-RL 的计算效率。",
+      "why": "它是你库中大量在线/离线分布鲁棒 RL 理论工作的实用 actor–critic 落点，可帮助识别理论假设到连续控制实现之间的缝隙。",
+      "caveat": "鲁棒性依赖名义转移估计与 KL 集半径；五个控制任务上的经验优势不构成普遍部署保证。",
+      "primaryUrl": "https://iclr.cc/virtual/2026/poster/10008754"
     },
     {
       "id": "2608.02951",

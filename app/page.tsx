@@ -21,6 +21,12 @@ type Paper = {
   primaryUrl: string;
 };
 
+type RotationStatus = {
+  replacedCount: number;
+  historyWindowDays: number;
+  insufficientNewPapers: boolean;
+};
+
 const fallbackPapers: Paper[] = [
   {
     id: "2607.28390",
@@ -181,6 +187,7 @@ export default function Home() {
   const [generatedAt, setGeneratedAt] = useState("2026-08-06T16:00:00+08:00");
   const [checkedAt, setCheckedAt] = useState("2026-08-06T16:00:00+08:00");
   const [recommendationsChanged, setRecommendationsChanged] = useState(false);
+  const [rotation, setRotation] = useState<RotationStatus>({ replacedCount: 0, historyWindowDays: 7, insufficientNewPapers: true });
 
   useEffect(() => {
     setSaved(readStoredSet("paper4zch-saved", "paper2z-saved"));
@@ -193,6 +200,7 @@ export default function Home() {
         if (digest.generatedAt) setGeneratedAt(digest.generatedAt);
         if (digest.checkedAt) setCheckedAt(digest.checkedAt);
         if (typeof digest.recommendationsChanged === "boolean") setRecommendationsChanged(digest.recommendationsChanged);
+        if (digest.rotation) setRotation(digest.rotation as RotationStatus);
       })
       .catch(() => undefined);
   }, []);
@@ -256,6 +264,10 @@ export default function Home() {
     hour12: false,
   }).format(new Date(checkedAt)).replaceAll("/", "."), [checkedAt]);
 
+  const rotationHeadline = rotation.insufficientNewPapers
+    ? `今日高质量新论文不足${rotation.replacedCount ? ` · 已轮换 ${rotation.replacedCount} 篇` : ""}`
+    : `今日已轮换 ${rotation.replacedCount} 篇`;
+
   return (
     <main>
       <header className="masthead">
@@ -274,7 +286,7 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="hero-copy">
           <p className="eyebrow">从你的 Zotero 出发，而不是从热榜出发</p>
-          <h1>今天真正值得你读的<br /><em>8 篇新论文</em></h1>
+          <h1>今天真正值得你读的<br /><em>8 篇论文</em></h1>
           <p className="hero-lede">
             根据最近 800 条文献元数据建立兴趣画像，只读近一年 ICLR、ICML、NeurIPS 主会中稿，
             以及通过公开摘要证据自动初筛的 arXiv 新稿，再按相关性、新鲜度与研究信号排序。
@@ -312,8 +324,8 @@ export default function Home() {
       <section className="digest" id="digest">
         <div className={`refresh-status ${recommendationsChanged ? "changed" : "unchanged"}`} role="status">
           <span className="refresh-status-dot" />
-          <strong>{recommendationsChanged ? "今日推荐已更新" : "今日无更优新论文"}</strong>
-          <small>最后检查 {checkedLabel} CST · 当前推荐更新于 {generatedLabel} CST</small>
+          <strong>{rotationHeadline}</strong>
+          <small>最近 {rotation.historyWindowDays} 天不重复 · 最后检查 {checkedLabel} CST · 当前推荐更新于 {generatedLabel} CST</small>
         </div>
         <div className="digest-head">
           <div>
@@ -440,10 +452,9 @@ export default function Home() {
 
       <footer>
         <div><span className="brand-mark small">P4Z</span><strong>Paper4ZCH Literature Radar</strong></div>
-        <p>GitHub 云端重试：08:17 / 12:17 / 16:17 / 20:17 · 每日成功发布一次</p>
+        <p>每日轮换 3–5 篇 · 最近 7 天不重复 · 高质量候选不足时不凑数</p>
         {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper4zch-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
       </footer>
     </main>
   );
 }
-

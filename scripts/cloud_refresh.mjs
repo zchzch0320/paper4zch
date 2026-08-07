@@ -4,8 +4,12 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const digestPath = resolve(projectRoot, "public", "recommendations.json");
+const historyPath = resolve(projectRoot, "public", "recommendation-history.json");
 const DAY_MS = 86_400_000;
 const BEIJING_OFFSET_MS = 8 * 60 * 60 * 1000;
+const HISTORY_WINDOW_DAYS = 7;
+const HISTORY_RETENTION_DAYS = 30;
+const ROTATION_MIN_SCORE = 80;
 
 const TOPIC_RULES = [
   { name: "安全 / CMDP", terms: ["constrained reinforcement", "safe reinforcement", "cmdp", "constraint violation", "primal-dual"] },
@@ -128,19 +132,76 @@ function normalizedTitle(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-export function buildDigest(previous, fetched, now = new Date()) {
+function beijingDayAge(dateKey, now) {
+  const today = Date.parse(`${beijingDateKey(now)}T00:00:00Z`);
+  const date = Date.parse(`${dateKey}T00:00:00Z`);
+  return Number.isFinite(date) ? Math.floor((today - date) / DAY_MS) : Number.POSITIVE_INFINITY;
+}
+
+export function normalizeHistory(history = {}) {
+  return {
+    windowDays: HISTORY_WINDOW_DAYS,
+    retentionDays: HISTORY_RETENTION_DAYS,
+    entries: Array.isArray(history.entries) ? history.entries
+      .filter((entry) => entry?.date && Array.isArray(entry.paperIds))
+      .map((entry) => ({ ...entry, introducedIds: Array.isArray(entry.introducedIds) ? entry.introducedIds : [] })) : [],
+    catalog: Array.isArray(history.catalog) ? history.catalog : [],
+  };
+}
+
+function recordHistory(history, candidatePapers, selected, introducedIds, now) {
+  const normalized = normalizeHistory(history);
+  const today = beijingDateKey(now);
+  const entriesByDate = new Map(normalized.entries.map((entry) => [entry.date, {
+    paperIds: new Set(entry.paperIds),
+    introducedIds: new Set(entry.introducedIds),
+  }]));
+  const todayEntry = entriesByDate.get(today) ?? { paperIds: new Set(), introducedIds: new Set() };
+  const todayIds = todayEntry.paperIds;
+  selected.forEach((paper) => todayIds.add(paper.id));
+  introducedIds.forEach((id) => todayEntry.introducedIds.add(id));
+  entriesByDate.set(today, todayEntry);
+
+  const entries = [...entriesByDate.entries()]
+    .filter(([date]) => beijingDayAge(date, now) < HISTORY_RETENTION_DAYS)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([date, entry]) => ({ date, paperIds: [...entry.paperIds], introducedIds: [...entry.introducedIds] }));
+  const retainedIds = new Set(entries.flatMap((entry) => entry.paperIds));
+  const catalogById = new Map(normalized.catalog.map((paper) => [paper.id, paper]));
+  candidatePapers.forEach((paper) => catalogById.set(paper.id, paper));
+  const catalog = [...catalogById.values()].filter((paper) => retainedIds.has(paper.id));
+  return { windowDays: HISTORY_WINDOW_DAYS, retentionDays: HISTORY_RETENTION_DAYS, entries, catalog };
+}
+
+export function buildRefresh(previous, fetched, history = {}, now = new Date()) {
   const cutoff = new Date(now.getTime() - 365 * DAY_MS);
-  const eligibleExisting = previous.papers.filter((paper) => new Date(`${paper.publishedAt}T00:00:00Z`) >= cutoff);
+  const normalizedHistory = normalizeHistory(history);
+  const eligibleExisting = [...previous.papers, ...normalizedHistory.catalog]
+    .filter((paper) => new Date(`${paper.publishedAt}T00:00:00Z`) >= cutoff);
   const screened = fetched.map((paper) => screenArxivPaper(paper, now)).filter(Boolean);
   const byTitle = new Map(eligibleExisting.map((paper) => [normalizedTitle(paper.title), paper]));
   for (const paper of screened) if (!byTitle.has(normalizedTitle(paper.title))) byTitle.set(normalizedTitle(paper.title), paper);
 
   const all = [...byTitle.values()].sort((a, b) => b.score - a.score || b.publishedAt.localeCompare(a.publishedAt));
-  const conferences = all.filter((paper) => paper.status === "conference").slice(0, 2);
-  const arxiv = all.filter((paper) => paper.status === "arxiv").slice(0, 6);
-  const preferred = [...arxiv, ...conferences];
-  const preferredIds = new Set(preferred.map((paper) => paper.id));
-  const selected = [...preferred, ...all.filter((paper) => !preferredIds.has(paper.id))]
+  const recentIds = new Set(normalizedHistory.entries
+    .filter((entry) => beijingDayAge(entry.date, now) < HISTORY_WINDOW_DAYS)
+    .flatMap((entry) => entry.paperIds));
+  const currentIds = new Set(previous.papers.map((paper) => paper.id));
+  const freshCandidates = all.filter((paper) => !currentIds.has(paper.id) && !recentIds.has(paper.id) && paper.score >= ROTATION_MIN_SCORE);
+  const today = beijingDateKey(now);
+  const todayEntry = normalizedHistory.entries.find((entry) => entry.date === today);
+  const fallbackIntroducedIds = beijingDateKey(previous.checkedAt) === today ? (previous.rotation?.newPaperIds ?? []) : [];
+  const alreadyIntroducedIds = new Set(todayEntry?.introducedIds?.length ? todayEntry.introducedIds : fallbackIntroducedIds);
+  const excellentCount = freshCandidates.filter((paper) => paper.score >= 88).length;
+  const targetTotal = excellentCount >= 5 ? 5 : excellentCount >= 4 ? 4 : 3;
+  const replacementTarget = Math.min(freshCandidates.length, Math.max(0, 5 - alreadyIntroducedIds.size), Math.max(0, targetTotal - alreadyIntroducedIds.size));
+  const rotatedIn = freshCandidates.slice(0, replacementTarget);
+  rotatedIn.forEach((paper) => alreadyIntroducedIds.add(paper.id));
+  const keepers = previous.papers
+    .filter((paper) => new Date(`${paper.publishedAt}T00:00:00Z`) >= cutoff)
+    .sort((a, b) => b.score - a.score || b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, Math.max(0, 8 - rotatedIn.length));
+  const selected = [...rotatedIn, ...keepers]
     .sort((a, b) => b.score - a.score || b.publishedAt.localeCompare(a.publishedAt))
     .slice(0, 8);
   const previousIds = previous.papers.map((paper) => paper.id);
@@ -148,10 +209,19 @@ export function buildDigest(previous, fetched, now = new Date()) {
   const recommendationsChanged = previousIds.length !== selectedIds.length
     || previousIds.some((id, index) => id !== selectedIds[index]);
 
-  return {
+  const digest = {
     generatedAt: recommendationsChanged ? now.toISOString() : (previous.generatedAt ?? now.toISOString()),
     checkedAt: now.toISOString(),
     recommendationsChanged,
+    rotation: {
+      targetMin: 3,
+      targetMax: 5,
+      replacedCount: alreadyIntroducedIds.size,
+      newPaperIds: [...alreadyIntroducedIds],
+      historyWindowDays: HISTORY_WINDOW_DAYS,
+      qualityFloor: ROTATION_MIN_SCORE,
+      insufficientNewPapers: alreadyIntroducedIds.size < 3,
+    },
     policy: {
       windowDays: 365,
       conferenceVenues: ["ICLR", "ICML", "NeurIPS"],
@@ -161,11 +231,18 @@ export function buildDigest(previous, fetched, now = new Date()) {
     profile: previous.profile,
     papers: selected,
   };
+  const nextHistory = recordHistory(normalizedHistory, [...eligibleExisting, ...screened, ...previous.papers, ...selected], selected, alreadyIntroducedIds, now);
+  return { digest, history: nextHistory };
+}
+
+export function buildDigest(previous, fetched, now = new Date(), history = {}) {
+  return buildRefresh(previous, fetched, history, now).digest;
 }
 
 export function validateDigest(digest, now = new Date(digest.generatedAt)) {
   if (!Date.parse(digest.generatedAt) || !digest.profile || !Array.isArray(digest.papers) || digest.papers.length < 5 || digest.papers.length > 8) throw new Error("invalid digest shape");
   if (!Date.parse(digest.checkedAt) || typeof digest.recommendationsChanged !== "boolean") throw new Error("invalid refresh status");
+  if (!digest.rotation || digest.rotation.replacedCount < 0 || digest.rotation.replacedCount > 5 || !Array.isArray(digest.rotation.newPaperIds)) throw new Error("invalid rotation status");
   const cutoff = new Date(now.getTime() - 365 * DAY_MS);
   const titles = new Set();
   for (const paper of digest.papers) {
@@ -176,6 +253,17 @@ export function validateDigest(digest, now = new Date(digest.generatedAt)) {
     const title = normalizedTitle(paper.title);
     if (titles.has(title)) throw new Error(`duplicate title: ${paper.title}`);
     titles.add(title);
+  }
+  return true;
+}
+
+export function validateHistory(history) {
+  const normalized = normalizeHistory(history);
+  if (normalized.windowDays !== HISTORY_WINDOW_DAYS || normalized.retentionDays !== HISTORY_RETENTION_DAYS) throw new Error("invalid history policy");
+  const catalogIds = new Set(normalized.catalog.map((paper) => paper.id));
+  for (const entry of normalized.entries) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || new Set(entry.paperIds).size !== entry.paperIds.length || new Set(entry.introducedIds).size !== entry.introducedIds.length) throw new Error("invalid history entry");
+    if (entry.paperIds.some((id) => !catalogIds.has(id))) throw new Error("history paper missing from catalog");
   }
   return true;
 }
@@ -195,13 +283,19 @@ async function fetchRecentArxiv() {
 
 async function main() {
   const previous = JSON.parse(await readFile(digestPath, "utf8"));
+  const history = JSON.parse(await readFile(historyPath, "utf8"));
   const fetched = await fetchRecentArxiv();
-  const next = buildDigest(previous, fetched, new Date());
-  validateDigest(next);
-  const temporary = `${digestPath}.tmp`;
-  await writeFile(temporary, `${JSON.stringify(next, null, 2)}\n`, "utf8");
-  await rename(temporary, digestPath);
-  console.log(`Paper4ZCH selected ${next.papers.length} papers from ${fetched.length} recent arXiv records.`);
+  const next = buildRefresh(previous, fetched, history, new Date());
+  validateDigest(next.digest);
+  validateHistory(next.history);
+  const digestTemporary = `${digestPath}.tmp`;
+  const historyTemporary = `${historyPath}.tmp`;
+  await writeFile(digestTemporary, `${JSON.stringify(next.digest, null, 2)}\n`, "utf8");
+  await writeFile(historyTemporary, `${JSON.stringify(next.history, null, 2)}\n`, "utf8");
+  await rename(digestTemporary, digestPath);
+  await rename(historyTemporary, historyPath);
+  const status = next.digest.rotation.insufficientNewPapers ? "high-quality candidates were sparse" : "rotation target met";
+  console.log(`Paper4ZCH rotated ${next.digest.rotation.replacedCount} of ${next.digest.papers.length} papers from ${fetched.length} recent arXiv records; ${status}.`);
 }
 
 if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.meta.url) {

@@ -29,6 +29,8 @@ Create a compact, high-precision daily paper feed from the user's actual reading
    - Remove papers already in Zotero and collapse arXiv/conference duplicates by normalized title or DOI/arXiv ID.
    - Use `scripts/rank_candidates.py` for a reproducible first pass.
    - Balance relevance, freshness, source status, novelty relative to the library, and diversity.
+   - For Paper4ZCH daily rotation, replace 3–5 strong papers when enough eligible candidates exist, block reintroduction of papers shown in the previous 7 Beijing calendar days, and retain the strongest unexpired current papers in the remaining slots.
+   - If fewer than 3 candidates pass the quality floor, rotate only those that pass and expose the shortage instead of weakening the gate.
    - Default to 5–8 papers. Avoid filling a quota with weak matches.
 5. Read and summarize.
    - Read at least the abstract and primary record for every recommended paper; inspect the paper when claims cannot be supported by the abstract.
@@ -42,6 +44,7 @@ Create a compact, high-precision daily paper feed from the user's actual reading
    - For this project, use the GitHub Actions retry schedule and the public derived profile so refreshes do not require the user's computer or Codex.
    - Attempt at several distributed cloud time slots, but use the Beijing calendar date in `checkedAt` to publish at most once after the first successful check that day.
    - Keep `generatedAt` as the time the recommendation set last changed. Update `checkedAt` after every successful daily check and set `recommendationsChanged` truthfully so the site can distinguish a fresh unchanged check from a stale feed.
+   - Persist the bounded public rotation history and paper catalog in GitHub together with the digest so the 7-day exclusion works across machines and cloud runners.
    - Run the deterministic cloud refresh, validation, static build, and Pages deployment; publish only when validation succeeds.
    - Preserve the previous valid digest if retrieval, summarization, build, or deployment fails.
 

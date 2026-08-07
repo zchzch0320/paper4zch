@@ -47,6 +47,9 @@ test("daily recommendation feed is valid and deduplicated", async () => {
   assert.ok(Date.parse(digest.generatedAt));
   assert.ok(Date.parse(digest.checkedAt));
   assert.equal(typeof digest.recommendationsChanged, "boolean");
+  assert.ok(digest.rotation);
+  assert.equal(digest.rotation.historyWindowDays, 7);
+  assert.ok(digest.rotation.replacedCount >= 0 && digest.rotation.replacedCount <= 5);
   assert.ok(digest.profile.paperCount > 0);
   assert.ok(digest.papers.length >= 5 && digest.papers.length <= 8);
   assert.equal(digest.policy.windowDays, 365);
@@ -74,4 +77,3 @@ test("daily recommendation feed is valid and deduplicated", async () => {
     titles.add(normalized);
   }
 });
-

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { beijingDateKey, buildDigest, parseArxivFeed, screenArxivPaper, shouldRefreshToday, validateDigest } from "../scripts/cloud_refresh.mjs";
+import { beijingDateKey, buildDigest, buildRefresh, parseArxivFeed, screenArxivPaper, shouldRefreshToday, validateDigest, validateHistory } from "../scripts/cloud_refresh.mjs";
 
 const sampleFeed = `<?xml version="1.0"?><feed><entry>
   <id>https://arxiv.org/abs/2608.12345v1</id>
@@ -37,6 +37,8 @@ test("builds a valid rolling digest while preserving verified conference papers"
   assert.equal(digest.policy.arxivQualityGate, "automated-abstract-screen-v1");
   assert.equal(digest.checkedAt, "2026-08-06T00:00:00.000Z");
   assert.equal(digest.recommendationsChanged, true);
+  assert.equal(digest.rotation.replacedCount, 1);
+  assert.equal(digest.rotation.insufficientNewPapers, true);
   assert.ok(digest.papers.some((paper) => paper.status === "conference"));
   assert.ok(digest.papers.some((paper) => paper.id === "2608.12345"));
   assert.equal(validateDigest(digest), true);
@@ -66,3 +68,38 @@ test("records a successful check without pretending unchanged papers are new", (
   assert.equal(digest.checkedAt, "2026-08-06T00:00:00.000Z");
 });
 
+test("rotates at least three strong papers and records a seven-day history", () => {
+  const previous = {
+    generatedAt: "2026-08-05T00:00:00Z",
+    profile: { paperCount: 800, topics: [], summary: "test" },
+    papers: Array.from({ length: 8 }, (_, index) => ({
+      id: `old-${index}`, title: `Old Paper ${index}`, authors: ["Author"], source: "ICLR 2026",
+      status: "conference", publishedAt: "2026-01-26", score: 96 - index, topics: ["safe"],
+      thesis: "thesis", method: "method", evidence: "evidence", why: "why", caveat: "caveat",
+      primaryUrl: `https://openreview.net/forum?id=old-${index}`,
+    })),
+  };
+  const entries = Array.from({ length: 5 }, (_, index) => sampleFeed
+    .replaceAll("2608.12345", `2608.1234${index}`)
+    .replace("Provable Safe Reinforcement Learning", `Provable Safe Reinforcement Learning ${index}`));
+  const fetched = entries.flatMap(parseArxivFeed);
+  const initialHistory = {
+    windowDays: 7,
+    retentionDays: 30,
+    entries: [{ date: "2026-08-05", paperIds: previous.papers.map((paper) => paper.id) }],
+    catalog: previous.papers,
+  };
+  const next = buildRefresh(previous, fetched, initialHistory, new Date("2026-08-06T00:00:00Z"));
+  assert.ok(next.digest.rotation.replacedCount >= 3 && next.digest.rotation.replacedCount <= 5);
+  assert.equal(next.digest.rotation.insufficientNewPapers, false);
+  assert.equal(next.digest.rotation.newPaperIds.length, next.digest.rotation.replacedCount);
+  assert.equal(next.digest.papers.filter((paper) => paper.id.startsWith("old-")).length, 8 - next.digest.rotation.replacedCount);
+  assert.equal(validateHistory(next.history), true);
+  const today = next.history.entries.find((entry) => entry.date === "2026-08-06");
+  assert.deepEqual(new Set(today.paperIds), new Set(next.digest.papers.map((paper) => paper.id)));
+  assert.deepEqual(new Set(today.introducedIds), new Set(next.digest.rotation.newPaperIds));
+
+  const repeated = buildRefresh(next.digest, fetched, next.history, new Date("2026-08-06T04:00:00Z"));
+  assert.equal(repeated.digest.rotation.replacedCount, next.digest.rotation.replacedCount);
+  assert.deepEqual(new Set(repeated.digest.rotation.newPaperIds), new Set(next.digest.rotation.newPaperIds));
+});
