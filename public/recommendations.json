@@ -1,14 +1,12 @@
 {
   "generatedAt": "2026-08-07T01:59:54.411Z",
-  "checkedAt": "2026-08-07T02:05:25.054Z",
+  "checkedAt": "2026-08-08T02:23:50.872Z",
   "recommendationsChanged": false,
   "rotation": {
     "targetMin": 3,
     "targetMax": 5,
-    "replacedCount": 1,
-    "newPaperIds": [
-      "2608.02951"
-    ],
+    "replacedCount": 0,
+    "newPaperIds": [],
     "historyWindowDays": 7,
     "qualityFloor": 80,
     "insufficientNewPapers": true
