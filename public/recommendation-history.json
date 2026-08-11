@@ -3,6 +3,22 @@
   "retentionDays": 30,
   "entries": [
     {
+      "date": "2026-08-11",
+      "paperIds": [
+        "2607.28390",
+        "2608.03562",
+        "2605.03125",
+        "2604.03891",
+        "2605.19235",
+        "EHs3tSukHC",
+        "1SdPgRQrr5",
+        "2608.08604"
+      ],
+      "introducedIds": [
+        "2608.08604"
+      ]
+    },
+    {
       "date": "2026-08-10",
       "paperIds": [
         "2607.28390",
@@ -281,6 +297,32 @@
       "method": "公开摘要自动整理：Preference-based reinforcement learning (PbRL) for general stochastic MDPs often requires training a reward model. Existing reward-model-free methods are either restricted to bandits or deterministic MDPs, such as DPO or P3O, or use zeroth-order, gradient-free optimization, which in general exhibits a slower convergence rate than gradient-based algorithms. Furthermore, existing reward-model-free preference-based RL algorithms almost exclusively use trajectory-level feedback, which can require significant effort fr…",
       "evidence": "摘要中的证据信号：Existing reward-model-free methods are either restricted to bandits or deterministic MDPs, such as DPO or P3O, or use zeroth-order, gradient-free optimization, which in general exhibits a slower convergence rate than gradient-based algorithms.",
       "why": "与公开研究画像中的「RLHF / 偏好学习、Actor–Critic」方向匹配。",
+      "caveat": "这是免费云端流程基于标题和公开摘要的自动初筛，不是完整同行评审、录用预测或正文级质量评估。"
+    },
+    {
+      "id": "2608.08604",
+      "title": "Multi-Agent Reinforcement Learning via Agent-Specific Preference",
+      "authors": [
+        "Ni Mu",
+        "Yao Luan",
+        "Yiqin Yang",
+        "Qing-Shan Jia"
+      ],
+      "source": "arXiv · 2026.08.09",
+      "status": "arxiv",
+      "publishedAt": "2026-08-09",
+      "updatedAt": "2026-08-09",
+      "primaryUrl": "https://arxiv.org/abs/2608.08604",
+      "secondaryUrl": null,
+      "score": 80,
+      "topics": [
+        "多智能体博弈",
+        "RLHF / 偏好学习"
+      ],
+      "thesis": "作者摘要要点：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions.",
+      "method": "公开摘要自动整理：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions. Designing such rewards is challenging, especially in systems with heterogeneous agents, where a single scalar objective may fail to capture diverse behaviors. In this paper, we introduce Multi-AGent Preference-Integrated lEarning (MAGPIE), which addresses these challenges through agent-specific preference modeling. Each agent is evaluated by a ded…",
+      "evidence": "摘要中的证据信号：Extensive experiments on benchmark multi-agent tasks and a sequential production line task show that MAGPIE achieves performance comparable to reward-engineered baselines, demonstrating its potential to facilitate policy learning in scenarios where precise reward engineering is impractical.",
+      "why": "与公开研究画像中的「多智能体博弈、RLHF / 偏好学习」方向匹配。",
       "caveat": "这是免费云端流程基于标题和公开摘要的自动初筛，不是完整同行评审、录用预测或正文级质量评估。"
     }
   ]
