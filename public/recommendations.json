@@ -1,12 +1,14 @@
 {
-  "generatedAt": "2026-08-11T02:29:44.962Z",
-  "checkedAt": "2026-08-13T02:49:20.912Z",
-  "recommendationsChanged": false,
+  "generatedAt": "2026-08-14T02:48:05.844Z",
+  "checkedAt": "2026-08-14T02:48:05.844Z",
+  "recommendationsChanged": true,
   "rotation": {
     "targetMin": 3,
     "targetMax": 5,
-    "replacedCount": 0,
-    "newPaperIds": [],
+    "replacedCount": 1,
+    "newPaperIds": [
+      "a19MA0ksbc"
+    ],
     "historyWindowDays": 7,
     "qualityFloor": 80,
     "insufficientNewPapers": true
@@ -218,30 +220,32 @@
       "primaryUrl": "https://openreview.net/forum?id=1SdPgRQrr5"
     },
     {
-      "id": "2608.08604",
-      "title": "Multi-Agent Reinforcement Learning via Agent-Specific Preference",
+      "id": "a19MA0ksbc",
+      "title": "DR-SAC: Distributionally Robust Soft Actor-Critic for Reinforcement Learning under Uncertainty",
       "authors": [
-        "Ni Mu",
-        "Yao Luan",
-        "Yiqin Yang",
-        "Qing-Shan Jia"
+        "Mingxuan Cui",
+        "Duo Zhou",
+        "Yuxuan Han",
+        "Grani A. Hanasusanto",
+        "Qiong Wang",
+        "Huan Zhang",
+        "Zhengyuan Zhou"
       ],
-      "source": "arXiv · 2026.08.09",
-      "status": "arxiv",
-      "publishedAt": "2026-08-09",
-      "updatedAt": "2026-08-09",
-      "primaryUrl": "https://arxiv.org/abs/2608.08604",
-      "secondaryUrl": null,
-      "score": 80,
+      "source": "ICLR 2026 · Poster",
+      "status": "conference",
+      "publishedAt": "2026-01-26",
+      "score": 88,
       "topics": [
-        "多智能体博弈",
-        "RLHF / 偏好学习"
+        "分布鲁棒",
+        "离线 RL",
+        "Actor–Critic"
       ],
-      "thesis": "作者摘要要点：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions.",
-      "method": "公开摘要自动整理：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions. Designing such rewards is challenging, especially in systems with heterogeneous agents, where a single scalar objective may fail to capture diverse behaviors. In this paper, we introduce Multi-AGent Preference-Integrated lEarning (MAGPIE), which addresses these challenges through agent-specific preference modeling. Each agent is evaluated by a ded…",
-      "evidence": "摘要中的证据信号：Extensive experiments on benchmark multi-agent tasks and a sequential production line task show that MAGPIE achieves performance comparable to reward-engineered baselines, demonstrating its potential to facilitate policy learning in scenarios where precise reward engineering is impractical.",
-      "why": "与公开研究画像中的「多智能体博弈、RLHF / 偏好学习」方向匹配。",
-      "caveat": "这是免费云端流程基于标题和公开摘要的自动初筛，不是完整同行评审、录用预测或正文级质量评估。"
+      "thesis": "把 KL 不确定集合下的分布鲁棒软策略迭代扩展到连续动作 actor–critic，并面向离线数据估计名义转移。",
+      "method": "DR-SAC 优化最坏转移模型下的熵正则回报，推导 robust soft policy iteration 及其收敛性质，并以生成模型从离线数据估计未知 nominal dynamics。",
+      "evidence": "ICLR 官方页面报告在五个连续控制任务上，常见扰动下平均回报最高达到 SAC 基线的 9.8 倍，同时改善相较既有 DR-RL 的计算效率。",
+      "why": "它是你库中大量在线/离线分布鲁棒 RL 理论工作的实用 actor–critic 落点，可帮助识别理论假设到连续控制实现之间的缝隙。",
+      "caveat": "鲁棒性依赖名义转移估计与 KL 集半径；五个控制任务上的经验优势不构成普遍部署保证。",
+      "primaryUrl": "https://iclr.cc/virtual/2026/poster/10008754"
     }
   ]
 }
