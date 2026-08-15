@@ -3,6 +3,20 @@
   "retentionDays": 30,
   "entries": [
     {
+      "date": "2026-08-15",
+      "paperIds": [
+        "2607.28390",
+        "2608.03562",
+        "2605.03125",
+        "2604.03891",
+        "2605.19235",
+        "EHs3tSukHC",
+        "1SdPgRQrr5",
+        "a19MA0ksbc"
+      ],
+      "introducedIds": []
+    },
+    {
       "date": "2026-08-14",
       "paperIds": [
         "2607.28390",
