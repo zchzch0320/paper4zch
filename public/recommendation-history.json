@@ -3,133 +3,68 @@
   "retentionDays": 30,
   "entries": [
     {
-      "date": "2026-08-16",
+      "date": "2026-08-17",
       "paperIds": [
+        "10.52202/085713-1571",
+        "2605.01242",
+        "cQD2wxFhFG",
+        "10.52202/085713-0318",
+        "10.52202/085713-1744",
         "2607.28390",
         "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "a19MA0ksbc"
+        "2605.03125"
       ],
+      "introducedIds": [
+        "10.52202/085713-1571",
+        "2605.01242",
+        "cQD2wxFhFG",
+        "10.52202/085713-0318",
+        "10.52202/085713-1744"
+      ]
+    },
+    {
+      "date": "2026-08-16",
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "a19MA0ksbc"],
       "introducedIds": []
     },
     {
       "date": "2026-08-15",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "a19MA0ksbc"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "a19MA0ksbc"],
       "introducedIds": []
     },
     {
       "date": "2026-08-14",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "a19MA0ksbc"
-      ],
-      "introducedIds": [
-        "a19MA0ksbc"
-      ]
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "a19MA0ksbc"],
+      "introducedIds": ["a19MA0ksbc"]
     },
     {
       "date": "2026-08-13",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.08604"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.08604"],
       "introducedIds": []
     },
     {
       "date": "2026-08-12",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.08604"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.08604"],
       "introducedIds": []
     },
     {
       "date": "2026-08-11",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.08604"
-      ],
-      "introducedIds": [
-        "2608.08604"
-      ]
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.08604"],
+      "introducedIds": ["2608.08604"]
     },
     {
       "date": "2026-08-10",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.02951"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.02951"],
       "introducedIds": []
     },
     {
       "date": "2026-08-09",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.02951"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.02951"],
       "introducedIds": []
     },
     {
       "date": "2026-08-08",
-      "paperIds": [
-        "2607.28390",
-        "2608.03562",
-        "2605.03125",
-        "2604.03891",
-        "2605.19235",
-        "EHs3tSukHC",
-        "1SdPgRQrr5",
-        "2608.02951"
-      ],
+      "paperIds": ["2607.28390", "2608.03562", "2605.03125", "2604.03891", "2605.19235", "EHs3tSukHC", "1SdPgRQrr5", "2608.02951"],
       "introducedIds": []
     },
     {
@@ -374,12 +309,7 @@
     {
       "id": "2608.08604",
       "title": "Multi-Agent Reinforcement Learning via Agent-Specific Preference",
-      "authors": [
-        "Ni Mu",
-        "Yao Luan",
-        "Yiqin Yang",
-        "Qing-Shan Jia"
-      ],
+      "authors": ["Ni Mu", "Yao Luan", "Yiqin Yang", "Qing-Shan Jia"],
       "source": "arXiv · 2026.08.09",
       "status": "arxiv",
       "publishedAt": "2026-08-09",
@@ -387,15 +317,111 @@
       "primaryUrl": "https://arxiv.org/abs/2608.08604",
       "secondaryUrl": null,
       "score": 80,
-      "topics": [
-        "多智能体博弈",
-        "RLHF / 偏好学习"
-      ],
+      "topics": ["多智能体博弈", "RLHF / 偏好学习"],
       "thesis": "作者摘要要点：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions.",
-      "method": "公开摘要自动整理：Multi-agent reinforcement learning (MARL) is a powerful framework for solving complex collaborative tasks, but it relies heavily on well-defined global reward functions. Designing such rewards is challenging, especially in systems with heterogeneous agents, where a single scalar objective may fail to capture diverse behaviors. In this paper, we introduce Multi-AGent Preference-Integrated lEarning (MAGPIE), which addresses these challenges through agent-specific preference modeling. Each agent is evaluated by a ded…",
-      "evidence": "摘要中的证据信号：Extensive experiments on benchmark multi-agent tasks and a sequential production line task show that MAGPIE achieves performance comparable to reward-engineered baselines, demonstrating its potential to facilitate policy learning in scenarios where precise reward engineering is impractical.",
-      "why": "与公开研究画像中的「多智能体博弈、RLHF / 偏好学习」方向匹配。",
-      "caveat": "这是免费云端流程基于标题和公开摘要的自动初筛，不是完整同行评审、录用预测或正文级质量评估。"
+      "method": "公开摘要自动整理：MAGPIE 通过 agent-specific preference modeling 处理异质智能体下单一全局奖励难以表达多样行为的问题，并为每个智能体学习独立偏好信号。",
+      "evidence": "作者报告其在多智能体基准和顺序生产线任务上取得与人工奖励工程基线相当的表现。",
+      "why": "该卡片保留在历史目录中，用于记录此前云端展示过的多智能体偏好学习候选。",
+      "caveat": "这是旧自动流程留下的历史记录，不属于本次 Codex 手动精选的当前推荐。"
+    },
+    {
+      "id": "10.52202/085713-1571",
+      "title": "Provably Efficient RL under Episode-Wise Safety in Constrained MDPs with Linear Function Approximation",
+      "authors": [
+        "Toshinori Kitamura",
+        "Arnob Ghosh",
+        "Tadashi Kozuno",
+        "Wataru Kumagai",
+        "Kazumi Kasaura",
+        "Kenta Hoshino",
+        "Yohei Hosoe",
+        "Yutaka Matsuo"
+      ],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/435e8fbbfc2c6072d4f3a5cb6e56a39a-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 99,
+      "topics": ["安全 / CMDP", "线性函数逼近", "安全探索", "Regret"],
+      "thesis": "在线性 CMDP 中同时实现接近最优的学习效率和逐回合零约束违反，把此前主要限于表格型模型的 episode-wise safety 推进到函数逼近场景。",
+      "method": "论文设计面向线性 CMDP 的计算高效在线算法，利用线性结构学习奖励与约束，并要求每个回合的期望总效用约束均得到满足，而不是只控制累计违反。",
+      "evidence": "官方论文给出 Õ(√K) regret 和 episode-wise zero-violation 保证；计算复杂度关于问题参数为多项式，并且不依赖状态空间大小。",
+      "why": "它精确位于你的 CMDP、安全探索、零违反和线性/低秩函数逼近交叉点，可作为继续研究 latent low-rank safe actor–critic 的强基准。",
+      "caveat": "结果针对单个期望总效用约束和线性 CMDP；逐回合期望可行并不等价于每条实际轨迹都满足 almost-sure safety。"
+    },
+    {
+      "id": "2605.01242",
+      "title": "Breaking the Computational Barrier: Provably Efficient Actor–Critic for Low-Rank MDPs",
+      "authors": ["Ruiquan Huang", "Donghao Li", "Yingbin Liang", "Jing Yang"],
+      "source": "ICML 2026 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2026-04-30",
+      "updatedAt": null,
+      "primaryUrl": "https://icml.cc/virtual/2026/poster/60983",
+      "secondaryUrl": "https://arxiv.org/abs/2605.01242",
+      "score": 98,
+      "topics": ["低秩 MDP", "Actor–Critic", "函数逼近", "样本复杂度"],
+      "thesis": "在未知低秩 MDP 中，仅依赖可归约到监督学习的 policy-evaluation oracle，就能实现可证明高效的 optimistic actor–critic，避免昂贵的规划 oracle。",
+      "method": "Opt-AC 用 optimistic policy evaluation 构造 critic，再以 mirror descent 更新 actor；论文还用监督学习为计算代理，比较不同 RL oracle 的可实现层级，并扩展到近似低秩模型。",
+      "evidence": "在有限时域与可实现候选表示类下，论文给出 Õ(H⁵d³|A|²log|Θ|/ε²) 的轨迹复杂度，比此前同类低秩结果少一个 d 因子，同时不调用 planning 或 constrained-planning oracle。",
+      "why": "它把你的 low-rank representation、actor–critic 与可计算性三条主线直接接起来，也是研究 PE-only safe low-rank actor–critic 最关键的起点。",
+      "caveat": "保证依赖候选低秩表示的可实现性、有限动作以及论文设定中的奖励/模型条件；加入未知安全成本后，乐观评估与可行探索如何兼容仍未解决。"
+    },
+    {
+      "id": "cQD2wxFhFG",
+      "title": "Offline Two-Player Zero-Sum Markov Games with KL Regularization",
+      "authors": ["Claire Chen", "Yuheng Zhang", "Xinyu Liu", "Zixuan Xie", "Shuze Daniel Liu", "Nan Jiang"],
+      "source": "ICML 2026 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2026-04-30",
+      "updatedAt": "2026-06-24",
+      "primaryUrl": "https://openreview.net/forum?id=cQD2wxFhFG",
+      "secondaryUrl": "https://arxiv.org/abs/2605.13025",
+      "score": 97,
+      "topics": ["Offline RL", "零和 Markov 博弈", "KL 正则化", "Nash equilibrium"],
+      "thesis": "KL 正则化本身即可稳定 offline 零和 Markov game 学习，在不显式构造 pessimistic bonus 的情况下获得快速均衡学习率。",
+      "method": "ROSE 框架求解正则化 offline sequential equilibrium；SOS-MD 则结合最小二乘价值估计和迭代 self-play mirror descent，输出最后一次迭代策略。",
+      "evidence": "在 unilateral concentrability 下，ROSE 和 SOS-MD 的统计误差达到 Õ(1/n)，SOS-MD 另有随自博弈轮数 T 衰减的 Õ(1/√T) 优化误差。",
+      "why": "与你的 offline RL、POMG/Markov game、鲁棒决策和策略优化方向高度重合，也直接提供了研究 constrained 或 partially observable 扩展的理论起点。",
+      "caveat": "快速率针对 KL 正则化目标，并依赖 unilateral concentrability 与参考策略支持；结论不直接覆盖一般和博弈、POMG 或安全约束。"
+    },
+    {
+      "id": "10.52202/085713-0318",
+      "title": "Efficient Policy Optimization in Robust Constrained MDPs with Iteration Complexity Guarantees",
+      "authors": ["Sourav Ganguly", "Kishan Panaganti", "Arnob Ghosh", "Adam Wierman"],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/0d7a32dbc94af8193b9bb9e798e4f4a8-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 96,
+      "topics": ["鲁棒 CMDP", "策略优化", "模型不确定性", "约束可行性"],
+      "thesis": "针对 reward 和 constraint 可能具有不同最坏转移模型、从而破坏标准强对偶的 RCMDP，给出无需二分搜索的可行策略优化方法。",
+      "method": "当约束尚未满足时，算法优先降低最坏情形约束值；进入可行区域后再提高最坏情形奖励，避开对 reward-cost 复合价值函数直接做 robust value iteration 的困难。",
+      "evidence": "官方论文证明算法在 O(ε⁻²) 次迭代后得到 ε-suboptimal 且可行的策略，并报告其相较依赖二分搜索的方法具有更低的计算成本。",
+      "why": "这是你的 distributionally robust RL 与 CMDP/primal–dual 两条研究线最直接的交叉论文，其强对偶失效现象也适合用于构造新的下界或函数逼近分析。",
+      "caveat": "O(ε⁻²) 是优化迭代复杂度而非完整的数据样本复杂度；不确定集合的统计校准和模型估计误差仍是独立问题。"
+    },
+    {
+      "id": "10.52202/085713-1744",
+      "title": "Spectral Learning for Infinite-Horizon Average-Reward POMDPs",
+      "authors": ["Alessio Russo", "Alberto Maria Metelli", "Marcello Restelli"],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/4b5f30bbb4e7568f0326fba2da7516cc-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 95,
+      "topics": ["POMDP", "平均回报", "谱学习", "Regret"],
+      "thesis": "通过混合多种 belief-based 行为策略的数据做谱估计，减少平均回报 POMDP 中传统谱方法只能利用单一采样策略所造成的数据浪费。",
+      "method": "Mixed Spectral Estimation 汇总来自多个 belief-based policies 的样本估计潜在模型，并将该估计器嵌入 Mixed Spectral UCRL 进行乐观在线决策。",
+      "evidence": "在标准 observability 与 ergodicity 条件下，论文给出有限样本估计保证，并在未知转移和观测模型时证明相对最优策略的 Õ(√T) regret。",
+      "why": "它同时连接你的 POMDP、average-reward RL、在线学习和表示/低秩估计方向，可作为进一步研究 safe POMDP 或多智能体隐状态谱估计的核心参考。",
+      "caveat": "保证依赖可观测性和遍历性，并限于单智能体平均回报 POMDP；没有同时处理 CMDP 约束、战略对手或一般神经函数逼近。"
     }
   ]
 }

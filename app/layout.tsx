@@ -7,8 +7,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("host") || "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Paper4ZCH · 每日文献雷达";
-  const description = "根据公开 Zotero 衍生兴趣画像，每日筛选近一年三大会中稿并自动初筛 arXiv 新论文。";
+  const title = "Paper4ZCH · 个性化文献雷达";
+  const description = "根据公开 Zotero 衍生兴趣画像，由 Codex 手动核验并更新近一年三大会中稿与高质量 arXiv 新论文。";
 
   return {
     title,

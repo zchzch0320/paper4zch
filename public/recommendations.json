@@ -1,25 +1,27 @@
 {
-  "generatedAt": "2026-08-14T02:48:05.844Z",
-  "checkedAt": "2026-08-16T04:52:01.818Z",
-  "recommendationsChanged": false,
+  "generatedAt": "2026-08-17T02:19:43.571Z",
+  "checkedAt": "2026-08-17T02:19:43.571Z",
+  "recommendationsChanged": true,
   "rotation": {
     "targetMin": 3,
     "targetMax": 5,
-    "replacedCount": 0,
-    "newPaperIds": [],
+    "replacedCount": 5,
+    "newPaperIds": [
+      "10.52202/085713-1571",
+      "2605.01242",
+      "cQD2wxFhFG",
+      "10.52202/085713-0318",
+      "10.52202/085713-1744"
+    ],
     "historyWindowDays": 7,
     "qualityFloor": 80,
-    "insufficientNewPapers": true
+    "insufficientNewPapers": false
   },
   "policy": {
     "windowDays": 365,
-    "conferenceVenues": [
-      "ICLR",
-      "ICML",
-      "NeurIPS"
-    ],
+    "conferenceVenues": ["ICLR", "ICML", "NeurIPS"],
     "conferenceTrack": "main",
-    "arxivQualityGate": "automated-abstract-screen-v1"
+    "arxivQualityGate": "top-tier-rubric-v1"
   },
   "profile": {
     "paperCount": 800,
@@ -27,223 +29,157 @@
     "latestSave": "2026-08-03",
     "summary": "多智能体强化学习、Actor–Critic、表示学习与线性函数逼近、安全/约束 RL、低秩 MDP、分布鲁棒 RL 与 RLHF 理论",
     "topics": [
-      {
-        "name": "多智能体 RL",
-        "weight": 1
-      },
-      {
-        "name": "Actor–Critic",
-        "weight": 0.83
-      },
-      {
-        "name": "线性函数逼近",
-        "weight": 0.72
-      },
-      {
-        "name": "安全 / CMDP",
-        "weight": 0.61
-      },
-      {
-        "name": "分布鲁棒",
-        "weight": 0.54
-      }
+      { "name": "多智能体 RL", "weight": 1 },
+      { "name": "Actor–Critic", "weight": 0.83 },
+      { "name": "线性函数逼近", "weight": 0.72 },
+      { "name": "安全 / CMDP", "weight": 0.61 },
+      { "name": "分布鲁棒", "weight": 0.54 }
     ]
   },
   "papers": [
     {
+      "id": "10.52202/085713-1571",
+      "title": "Provably Efficient RL under Episode-Wise Safety in Constrained MDPs with Linear Function Approximation",
+      "authors": ["Toshinori Kitamura", "Arnob Ghosh", "Tadashi Kozuno", "Wataru Kumagai", "Kazumi Kasaura", "Kenta Hoshino", "Yohei Hosoe", "Yutaka Matsuo"],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/435e8fbbfc2c6072d4f3a5cb6e56a39a-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 99,
+      "topics": ["安全 / CMDP", "线性函数逼近", "安全探索", "Regret"],
+      "thesis": "在线性 CMDP 中同时实现接近最优的学习效率和逐回合零约束违反，把此前主要限于表格型模型的 episode-wise safety 推进到函数逼近场景。",
+      "method": "论文设计面向线性 CMDP 的计算高效在线算法，利用线性结构学习奖励与约束，并要求每个回合的期望总效用约束均得到满足，而不是只控制累计违反。",
+      "evidence": "官方论文给出 Õ(√K) regret 和 episode-wise zero-violation 保证；计算复杂度关于问题参数为多项式，并且不依赖状态空间大小。",
+      "why": "它精确位于你的 CMDP、安全探索、零违反和线性/低秩函数逼近交叉点，可作为继续研究 latent low-rank safe actor–critic 的强基准。",
+      "caveat": "结果针对单个期望总效用约束和线性 CMDP；逐回合期望可行并不等价于每条实际轨迹都满足 almost-sure safety。"
+    },
+    {
+      "id": "2605.01242",
+      "title": "Breaking the Computational Barrier: Provably Efficient Actor–Critic for Low-Rank MDPs",
+      "authors": ["Ruiquan Huang", "Donghao Li", "Yingbin Liang", "Jing Yang"],
+      "source": "ICML 2026 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2026-04-30",
+      "updatedAt": null,
+      "primaryUrl": "https://icml.cc/virtual/2026/poster/60983",
+      "secondaryUrl": "https://arxiv.org/abs/2605.01242",
+      "score": 98,
+      "topics": ["低秩 MDP", "Actor–Critic", "函数逼近", "样本复杂度"],
+      "thesis": "在未知低秩 MDP 中，仅依赖可归约到监督学习的 policy-evaluation oracle，就能实现可证明高效的 optimistic actor–critic，避免昂贵的规划 oracle。",
+      "method": "Opt-AC 用 optimistic policy evaluation 构造 critic，再以 mirror descent 更新 actor；论文还用监督学习为计算代理，比较不同 RL oracle 的可实现层级，并扩展到近似低秩模型。",
+      "evidence": "在有限时域与可实现候选表示类下，论文给出 Õ(H⁵d³|A|²log|Θ|/ε²) 的轨迹复杂度，比此前同类低秩结果少一个 d 因子，同时不调用 planning 或 constrained-planning oracle。",
+      "why": "它把你的 low-rank representation、actor–critic 与可计算性三条主线直接接起来，也是研究 PE-only safe low-rank actor–critic 最关键的起点。",
+      "caveat": "保证依赖候选低秩表示的可实现性、有限动作以及论文设定中的奖励/模型条件；加入未知安全成本后，乐观评估与可行探索如何兼容仍未解决。"
+    },
+    {
+      "id": "cQD2wxFhFG",
+      "title": "Offline Two-Player Zero-Sum Markov Games with KL Regularization",
+      "authors": ["Claire Chen", "Yuheng Zhang", "Xinyu Liu", "Zixuan Xie", "Shuze Daniel Liu", "Nan Jiang"],
+      "source": "ICML 2026 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2026-04-30",
+      "updatedAt": "2026-06-24",
+      "primaryUrl": "https://openreview.net/forum?id=cQD2wxFhFG",
+      "secondaryUrl": "https://arxiv.org/abs/2605.13025",
+      "score": 97,
+      "topics": ["Offline RL", "零和 Markov 博弈", "KL 正则化", "Nash equilibrium"],
+      "thesis": "KL 正则化本身即可稳定 offline 零和 Markov game 学习，在不显式构造 pessimistic bonus 的情况下获得快速均衡学习率。",
+      "method": "ROSE 框架求解正则化 offline sequential equilibrium；SOS-MD 则结合最小二乘价值估计和迭代 self-play mirror descent，输出最后一次迭代策略。",
+      "evidence": "在 unilateral concentrability 下，ROSE 和 SOS-MD 的统计误差达到 Õ(1/n)，SOS-MD 另有随自博弈轮数 T 衰减的 Õ(1/√T) 优化误差。",
+      "why": "与你的 offline RL、POMG/Markov game、鲁棒决策和策略优化方向高度重合，也直接提供了研究 constrained 或 partially observable 扩展的理论起点。",
+      "caveat": "快速率针对 KL 正则化目标，并依赖 unilateral concentrability 与参考策略支持；结论不直接覆盖一般和博弈、POMG 或安全约束。"
+    },
+    {
+      "id": "10.52202/085713-0318",
+      "title": "Efficient Policy Optimization in Robust Constrained MDPs with Iteration Complexity Guarantees",
+      "authors": ["Sourav Ganguly", "Kishan Panaganti", "Arnob Ghosh", "Adam Wierman"],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/0d7a32dbc94af8193b9bb9e798e4f4a8-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 96,
+      "topics": ["鲁棒 CMDP", "策略优化", "模型不确定性", "约束可行性"],
+      "thesis": "针对 reward 和 constraint 可能具有不同最坏转移模型、从而破坏标准强对偶的 RCMDP，给出无需二分搜索的可行策略优化方法。",
+      "method": "当约束尚未满足时，算法优先降低最坏情形约束值；进入可行区域后再提高最坏情形奖励，避开对 reward-cost 复合价值函数直接做 robust value iteration 的困难。",
+      "evidence": "官方论文证明算法在 O(ε⁻²) 次迭代后得到 ε-suboptimal 且可行的策略，并报告其相较依赖二分搜索的方法具有更低的计算成本。",
+      "why": "这是你的 distributionally robust RL 与 CMDP/primal–dual 两条研究线最直接的交叉论文，其强对偶失效现象也适合用于构造新的下界或函数逼近分析。",
+      "caveat": "O(ε⁻²) 是优化迭代复杂度而非完整的数据样本复杂度；不确定集合的统计校准和模型估计误差仍是独立问题。"
+    },
+    {
+      "id": "10.52202/085713-1744",
+      "title": "Spectral Learning for Infinite-Horizon Average-Reward POMDPs",
+      "authors": ["Alessio Russo", "Alberto Maria Metelli", "Marcello Restelli"],
+      "source": "NeurIPS 2025 · Main Conference",
+      "status": "conference",
+      "publishedAt": "2025-09-18",
+      "updatedAt": null,
+      "primaryUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/4b5f30bbb4e7568f0326fba2da7516cc-Abstract-Conference.html",
+      "secondaryUrl": null,
+      "score": 95,
+      "topics": ["POMDP", "平均回报", "谱学习", "Regret"],
+      "thesis": "通过混合多种 belief-based 行为策略的数据做谱估计，减少平均回报 POMDP 中传统谱方法只能利用单一采样策略所造成的数据浪费。",
+      "method": "Mixed Spectral Estimation 汇总来自多个 belief-based policies 的样本估计潜在模型，并将该估计器嵌入 Mixed Spectral UCRL 进行乐观在线决策。",
+      "evidence": "在标准 observability 与 ergodicity 条件下，论文给出有限样本估计保证，并在未知转移和观测模型时证明相对最优策略的 Õ(√T) regret。",
+      "why": "它同时连接你的 POMDP、average-reward RL、在线学习和表示/低秩估计方向，可作为进一步研究 safe POMDP 或多智能体隐状态谱估计的核心参考。",
+      "caveat": "保证依赖可观测性和遍历性，并限于单智能体平均回报 POMDP；没有同时处理 CMDP 约束、战略对手或一般神经函数逼近。"
+    },
+    {
       "id": "2607.28390",
       "title": "Hierarchical Multilevel Monte Carlo for Order-Optimal Neural Actor-Critic in Average-Reward CMDPs",
-      "authors": [
-        "Ankur Naskar",
-        "Vaneet Aggarwal"
-      ],
+      "authors": ["Ankur Naskar", "Vaneet Aggarwal"],
       "source": "arXiv · 2026.07.30",
       "status": "arxiv",
       "publishedAt": "2026-07-30",
-      "score": 98,
-      "topics": [
-        "约束 / CMDP",
-        "Actor–Critic",
-        "理论保证"
-      ],
+      "updatedAt": null,
+      "primaryUrl": "https://arxiv.org/abs/2607.28390",
+      "secondaryUrl": null,
+      "score": 94,
+      "topics": ["约束 / CMDP", "Actor–Critic", "理论保证"],
       "thesis": "用分层多层 Monte Carlo 同时消除轨迹采样与神经 critic 优化偏差，补上平均回报 CMDP 中神经 actor–critic 的阶最优收敛保证。",
-      "method": "作者指出，NTK 分析下神经 critic 存在偏差—计算成本冲突；新估计器用分层 MLMC 逼近长时间 critic 优化的偏差水平，同时只付出对数级期望样本成本，并嵌入 primal–dual Natural Actor–Critic。",
+      "method": "作者指出 NTK 分析下神经 critic 存在偏差—计算成本冲突；新估计器用分层 MLMC 逼近长时间 critic 优化的偏差水平，同时只付出对数级期望样本成本，并嵌入 primal–dual Natural Actor–Critic。",
       "evidence": "论文声称最优性差距和约束违反均达到 Õ(T⁻¹ᐟ²)，且不需要预先知道混合时间；作者称这是一般策略参数化与神经 critic 下的首个阶最优结果。",
-      "why": "与你库中 CMDP、primal–dual、安全 RL 和 actor–critic 理论四条主线同时重合，是今天最值得精读的一篇。",
-      "caveat": "核心分析建立在 NTK 型神经 critic 条件上；其对有限宽深网和实际训练超参数的解释力仍需阅读正文判断。",
-      "primaryUrl": "https://arxiv.org/abs/2607.28390"
+      "why": "与你库中 CMDP、primal–dual、安全 RL 和 actor–critic 理论四条主线同时重合，适合与本期 episode-wise safety 结果对照阅读。",
+      "caveat": "核心分析建立在 NTK 型神经 critic 条件上；其对有限宽深网和实际训练超参数的解释力仍需进一步判断。"
     },
     {
       "id": "2608.03562",
       "title": "Robust General Utility for Reinforcement Learning",
-      "authors": [
-        "Zixuan Liu",
-        "Fangzheng Wu",
-        "Brian Summa",
-        "Zizhan Zheng"
-      ],
+      "authors": ["Zixuan Liu", "Fangzheng Wu", "Brian Summa", "Zizhan Zheng"],
       "source": "arXiv · 2026.08.04",
       "status": "arxiv",
       "publishedAt": "2026-08-04",
-      "score": 97,
-      "topics": [
-        "分布鲁棒",
-        "约束 RL",
-        "非凸优化"
-      ],
+      "updatedAt": null,
+      "primaryUrl": "https://arxiv.org/abs/2608.03562",
+      "secondaryUrl": null,
+      "score": 93,
+      "topics": ["分布鲁棒", "约束 RL", "非凸优化"],
       "thesis": "把部署时的效用错设纳入 minimax 学习，让奖励鲁棒 RL、约束 RL 与一般占用度量效用共享同一框架。",
-      "method": "在策略诱导的 occupancy measure 上定义效用不确定集合；凹效用情形采用投影随机梯度下降–上升，非凹情形采用 stochastic prox-extragradient，针对非凹引起的不适定行为做稳定化。",
-      "evidence": "作者给出凹情形的驻点保证，以及非凹情形到近似一阶驻点的收敛保证，并用 LLM 安全对齐和探索最大化实验核对理论趋势。",
+      "method": "在策略诱导的 occupancy measure 上定义效用不确定集合；凹效用情形采用投影随机梯度下降–上升，非凹情形采用 stochastic prox-extragradient 做稳定化。",
+      "evidence": "作者给出凹情形的驻点保证以及非凹情形到近似一阶驻点的收敛保证，并用 LLM 安全对齐和探索最大化实验核对理论趋势。",
       "why": "你的 Zotero 最近同时强化了分布鲁棒 RL、CMDP 与 RLHF 理论；这篇提供了一个可能统一三者的新抽象。",
-      "caveat": "非凹情形保证是一阶驻点而非全局最优；效用不确定集合如何校准也会直接决定鲁棒性含义。",
-      "primaryUrl": "https://arxiv.org/abs/2608.03562"
+      "caveat": "非凹情形保证是一阶驻点而非全局最优；效用不确定集合如何校准也会直接决定鲁棒性的实际含义。"
     },
     {
       "id": "2605.03125",
       "title": "Taming the Curses of Multiagency in Robust Markov Games with Large State Space through Linear Function Approximation",
-      "authors": [
-        "Jingchu Gai",
-        "Laixi Shi"
-      ],
+      "authors": ["Jingchu Gai", "Laixi Shi"],
       "source": "arXiv · 2026.05.04",
       "status": "arxiv",
       "publishedAt": "2026-05-04",
-      "score": 96,
-      "topics": [
-        "鲁棒 Markov 博弈",
-        "线性函数逼近",
-        "样本复杂度"
-      ],
-      "thesis": "在大状态空间的分布鲁棒 Markov 博弈中，引入线性函数逼近并尝试打破随智能体数量爆炸的样本复杂度。",
-      "method": "论文聚焦 total-variation 不确定集合下的一般鲁棒 Markov 博弈，分别研究生成模型访问与新定义的在线交互设置，目标是超越此前表格型或依赖 vanishing-minimal-value 假设的结果。",
-      "evidence": "作者声称两种设置中的算法都具备可证明的数据效率，并首次在大或无限状态空间下打破 robust Markov games 的 multiagency curse。",
-      "why": "它几乎精确落在你库中的“部分可观测/多智能体博弈 × 分布鲁棒 × 函数逼近”交叉点。",
-      "caveat": "摘要不足以判断结果是否依赖强规划 oracle、可实现性或特定 equilibrium 求解假设；这些应是精读时的第一检查项。",
-      "primaryUrl": "https://arxiv.org/abs/2605.03125"
-    },
-    {
-      "id": "2604.03891",
-      "title": "Provable Multi-Task Reinforcement Learning: A Representation Learning Framework with Low Rank Rewards",
-      "authors": [
-        "Yaoze Guo",
-        "Shana Moothedath"
-      ],
-      "source": "arXiv · 2026.04.04",
-      "status": "arxiv",
-      "publishedAt": "2026-04-04",
-      "score": 94,
-      "topics": [
-        "表示学习",
-        "低秩结构",
-        "多任务 RL"
-      ],
-      "thesis": "利用多任务奖励矩阵的低秩结构学习共享表示，并把表示误差明确连接到样本复杂度与策略 regret。",
-      "method": "研究共享状态动作空间和转移、但奖励不同的 T 个线性 MDP；先用 reward-free RL 学数据采集策略，再估计低秩奖励矩阵，避免高斯特征、incoherence 或已知最优解等限制。",
-      "evidence": "理论给出低秩矩阵恢复条件、表示误差与样本复杂度关系以及由学习表示构造近最优策略的 regret bound，并配有有限数据实验。",
-      "why": "与你库中的低秩 MDP、multitask representation learning 和 reward-free exploration 直接衔接。",
-      "caveat": "任务共享同一转移且满足线性 MDP 是关键结构假设；对 transition 也变化的多任务场景不直接适用。",
-      "primaryUrl": "https://arxiv.org/abs/2604.03891"
-    },
-    {
-      "id": "2605.19235",
-      "title": "GAE Falls Short in Imperfect-Information Self-Play Reinforcement Learning",
-      "authors": [
-        "Zhiyuan Fan",
-        "Gabriele Farina"
-      ],
-      "source": "arXiv · 2026.05.19",
-      "status": "arxiv",
-      "publishedAt": "2026-05-19",
+      "updatedAt": null,
+      "primaryUrl": "https://arxiv.org/abs/2605.03125",
+      "secondaryUrl": null,
       "score": 92,
-      "topics": [
-        "不完美信息博弈",
-        "Self-play",
-        "方差缩减"
-      ],
-      "thesis": "指出 GAE 在随机均衡策略下存在即使 critic 精确也无法消除的动作采样方差，并提出针对 self-play 的替代估计器。",
-      "method": "Q-boosting 使用 centralized action-value critic，把 sampled multi-step backup 换为在每一步对策略动作求期望的 Expected SARSA(λ) trace；VRPO 保留 PPO clipped objective 与 on-policy actor 更新。",
-      "evidence": "作者报告 VRPO 在斗地主和无限注德州扑克等中大型不完美信息博弈上持续取得强表现；摘要主要提供机制解释与经验结果。",
-      "why": "你的库里有 POSG、imperfect-information game 与可证明 MARL；这篇从估计器方差角度解释常用 PPO/GAE 组件为何失效。",
-      "caveat": "centralized Q critic 与逐步动作期望的计算规模可能成为瓶颈，且摘要未给出均衡收敛或样本复杂度保证。",
-      "primaryUrl": "https://arxiv.org/abs/2605.19235"
-    },
-    {
-      "id": "EHs3tSukHC",
-      "title": "Off-Policy Safe Reinforcement Learning with Cost-Constrained Optimistic Exploration",
-      "authors": [
-        "Guopeng Li",
-        "Matthijs T. J. Spaan",
-        "Julian Kooij"
-      ],
-      "source": "ICLR 2026 · Poster",
-      "status": "conference",
-      "publishedAt": "2026-01-26",
-      "score": 91,
-      "topics": [
-        "安全探索",
-        "离策略 RL",
-        "约束优化"
-      ],
-      "thesis": "把 optimistic exploration 限制在成本可控区域，并用分布式 critic 修正安全成本低估，兼顾样本效率与训练期安全。",
-      "method": "COX-Q 以 cost-constrained optimistic exploration 处理奖励/成本梯度冲突并自适应调节 trust region，再用 truncated quantile critics 缓解累计成本的低估偏差，同时用分位数不确定性指导探索。",
-      "evidence": "ICLR 官方摘要报告其在安全速度、导航和自动驾驶任务中实现较高样本效率、竞争性的评估安全性，并控制数据收集阶段的成本。",
-      "why": "与你库中 exploration–exploitation in CMDPs、DOPE 和 episode-wise safety 的问题意识高度一致，可作为实践侧对照。",
-      "caveat": "证据以实验为主；方法控制训练成本不等同于给出所有轨迹上的硬安全保证。",
-      "primaryUrl": "https://iclr.cc/virtual/2026/poster/10010695"
-    },
-    {
-      "id": "1SdPgRQrr5",
-      "title": "Dual-Objective Reinforcement Learning with Novel Hamilton-Jacobi-Bellman Formulations",
-      "authors": [
-        "William Sharpless",
-        "Dylan Hirsch",
-        "Sander Tonkens",
-        "Nikhil Shinde",
-        "Sylvia Herbert"
-      ],
-      "source": "ICLR 2026 · Poster",
-      "status": "conference",
-      "publishedAt": "2026-01-26",
-      "score": 89,
-      "topics": [
-        "安全约束",
-        "HJB",
-        "值函数分解"
-      ],
-      "thesis": "把 Reach–Always–Avoid 与双目标 Reach–Reach 问题分解为可组合的 Hamilton–Jacobi RL 值函数，从而得到显式 Bellman 形式。",
-      "method": "论文给出两类 dual-satisfaction 目标的值函数分解定理，并据此构造 DO-HJ-PPO；其约束表达不是简单 Lagrangian 加权，而是直接编码阈值满足结构。",
-      "evidence": "作者报告算法在安全到达与多目标任务的成功率、安全性和速度上优于多种基线；会议状态由 ICLR 2026 官方日程与 OpenReview 记录确认。",
-      "why": "适合与你熟悉的期望型 CMDP / primal–dual 方法并排阅读，比较“约束预算”与“可达/始终避障”两类安全语义。",
-      "caveat": "它解决的是特定 threshold-satisfaction 语义，不能直接替代一般累计期望约束 CMDP。",
-      "primaryUrl": "https://openreview.net/forum?id=1SdPgRQrr5"
-    },
-    {
-      "id": "a19MA0ksbc",
-      "title": "DR-SAC: Distributionally Robust Soft Actor-Critic for Reinforcement Learning under Uncertainty",
-      "authors": [
-        "Mingxuan Cui",
-        "Duo Zhou",
-        "Yuxuan Han",
-        "Grani A. Hanasusanto",
-        "Qiong Wang",
-        "Huan Zhang",
-        "Zhengyuan Zhou"
-      ],
-      "source": "ICLR 2026 · Poster",
-      "status": "conference",
-      "publishedAt": "2026-01-26",
-      "score": 88,
-      "topics": [
-        "分布鲁棒",
-        "离线 RL",
-        "Actor–Critic"
-      ],
-      "thesis": "把 KL 不确定集合下的分布鲁棒软策略迭代扩展到连续动作 actor–critic，并面向离线数据估计名义转移。",
-      "method": "DR-SAC 优化最坏转移模型下的熵正则回报，推导 robust soft policy iteration 及其收敛性质，并以生成模型从离线数据估计未知 nominal dynamics。",
-      "evidence": "ICLR 官方页面报告在五个连续控制任务上，常见扰动下平均回报最高达到 SAC 基线的 9.8 倍，同时改善相较既有 DR-RL 的计算效率。",
-      "why": "它是你库中大量在线/离线分布鲁棒 RL 理论工作的实用 actor–critic 落点，可帮助识别理论假设到连续控制实现之间的缝隙。",
-      "caveat": "鲁棒性依赖名义转移估计与 KL 集半径；五个控制任务上的经验优势不构成普遍部署保证。",
-      "primaryUrl": "https://iclr.cc/virtual/2026/poster/10008754"
+      "topics": ["鲁棒 Markov 博弈", "线性函数逼近", "样本复杂度"],
+      "thesis": "在大状态空间的分布鲁棒 Markov 博弈中引入线性函数逼近，目标是打破样本复杂度随智能体数量爆炸的 multiagency curse。",
+      "method": "论文研究 total-variation 不确定集合下的一般鲁棒 Markov 博弈，分别处理生成模型访问与在线交互设置，超越此前主要针对表格型模型的结果。",
+      "evidence": "作者证明两种设置中的算法都具有数据效率，并给出大或无限状态空间下不随联合动作空间指数增长的样本复杂度结果。",
+      "why": "它落在你的多智能体博弈、分布鲁棒和线性函数逼近交叉点，可与本期 fully observed robust CMDP 结果形成互补。",
+      "caveat": "关键保证仍依赖线性结构、TV 不确定集合及相应的可实现性或访问模型；结论尚未覆盖部分可观测博弈和安全约束。"
     }
   ]
 }

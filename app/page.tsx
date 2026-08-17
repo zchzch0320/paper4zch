@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import digestFallback from "../public/recommendations.json";
 
 type PaperStatus = "conference" | "arxiv";
 
@@ -27,7 +28,7 @@ type RotationStatus = {
   insufficientNewPapers: boolean;
 };
 
-const fallbackPapers: Paper[] = [
+const legacyFallbackPapers: Paper[] = [
   {
     id: "2607.28390",
     title: "Hierarchical Multilevel Monte Carlo for Order-Optimal Neural Actor-Critic in Average-Reward CMDPs",
@@ -158,6 +159,10 @@ const fallbackPapers: Paper[] = [
   },
 ];
 
+const fallbackPapers = Array.isArray(digestFallback.papers) && digestFallback.papers.length
+  ? digestFallback.papers as Paper[]
+  : legacyFallbackPapers;
+
 const filters = [
   { id: "all", label: "全部" },
   { id: "conference", label: "三大会中稿" },
@@ -184,15 +189,17 @@ export default function Home() {
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [read, setRead] = useState<Set<string>>(new Set());
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
-  const [generatedAt, setGeneratedAt] = useState("2026-08-06T16:00:00+08:00");
-  const [checkedAt, setCheckedAt] = useState("2026-08-06T16:00:00+08:00");
-  const [recommendationsChanged, setRecommendationsChanged] = useState(false);
-  const [rotation, setRotation] = useState<RotationStatus>({ replacedCount: 0, historyWindowDays: 7, insufficientNewPapers: true });
+  const [generatedAt, setGeneratedAt] = useState(digestFallback.generatedAt);
+  const [checkedAt, setCheckedAt] = useState(digestFallback.checkedAt);
+  const [recommendationsChanged, setRecommendationsChanged] = useState(digestFallback.recommendationsChanged);
+  const [rotation, setRotation] = useState<RotationStatus>(digestFallback.rotation);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- hydrate browser-only preferences after mount */
     setSaved(readStoredSet("paper4zch-saved", "paper2z-saved"));
     setRead(readStoredSet("paper4zch-read", "paper2z-read"));
     setDismissed(readStoredSet("paper4zch-dismissed", "paper2z-dismissed"));
+    /* eslint-enable react-hooks/set-state-in-effect */
     fetch(new URL("recommendations.json", document.baseURI))
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("digest unavailable")))
       .then((digest) => {
@@ -211,7 +218,8 @@ export default function Home() {
 
   function toggleSaved(id: string) {
     const next = new Set(saved);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
     setSaved(next);
     persist("paper4zch-saved", next);
   }
@@ -265,8 +273,8 @@ export default function Home() {
   }).format(new Date(checkedAt)).replaceAll("/", "."), [checkedAt]);
 
   const rotationHeadline = rotation.insufficientNewPapers
-    ? `今日高质量新论文不足${rotation.replacedCount ? ` · 已轮换 ${rotation.replacedCount} 篇` : ""}`
-    : `今日已轮换 ${rotation.replacedCount} 篇`;
+    ? `本次高质量新论文不足${rotation.replacedCount ? ` · 已更新 ${rotation.replacedCount} 篇` : ""}`
+    : `本次已更新 ${rotation.replacedCount} 篇`;
 
   return (
     <main>
@@ -277,7 +285,7 @@ export default function Home() {
         </a>
         <div className="masthead-meta">
           <span className="live-dot" />
-          每日研究雷达
+          Codex 手动精选
           <span className="meta-divider" />
           最后检查 {checkedLabel} CST
         </div>
@@ -286,10 +294,10 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="hero-copy">
           <p className="eyebrow">从你的 Zotero 出发，而不是从热榜出发</p>
-          <h1>今天真正值得你读的<br /><em>8 篇论文</em></h1>
+          <h1>本期真正值得你读的<br /><em>8 篇论文</em></h1>
           <p className="hero-lede">
             根据最近 800 条文献元数据建立兴趣画像，只读近一年 ICLR、ICML、NeurIPS 主会中稿，
-            以及通过公开摘要证据自动初筛的 arXiv 新稿，再按相关性、新鲜度与研究信号排序。
+            以及由 Codex 阅读原始记录后核验的高质量 arXiv 新稿，再按相关性、新鲜度与研究信号排序。
           </p>
           <div className="hero-actions">
             <a className="primary-action" href="#digest">开始浏览 <span>↓</span></a>
@@ -325,14 +333,14 @@ export default function Home() {
         <div className={`refresh-status ${recommendationsChanged ? "changed" : "unchanged"}`} role="status">
           <span className="refresh-status-dot" />
           <strong>{rotationHeadline}</strong>
-          <small>最近 {rotation.historyWindowDays} 天不重复 · 最后检查 {checkedLabel} CST · 当前推荐更新于 {generatedLabel} CST</small>
+          <small>由 Codex 手动更新 · 最近 {rotation.historyWindowDays} 天不重复 · 最后检查 {checkedLabel} CST · 当前推荐更新于 {generatedLabel} CST</small>
         </div>
         <div className="digest-head">
           <div>
-            <p className="section-index">01 / 今日文献</p>
+            <p className="section-index">01 / 本期文献</p>
             <h2>高匹配推荐</h2>
           </div>
-          <p className="digest-note">范围：近 365 天；会议仅保留已核验的 ICLR / ICML / NeurIPS 主会中稿。新增 arXiv 为免费云端自动初筛，不代表录用或完整质量评审。</p>
+          <p className="digest-note">范围：近 365 天；会议仅保留已核验的 ICLR / ICML / NeurIPS 主会中稿。arXiv 由 Codex 按正文证据与质量门槛手动筛选，不代表会议录用。</p>
         </div>
 
         <div className="controls" aria-label="论文筛选">
@@ -445,14 +453,14 @@ export default function Home() {
         </div>
         <div className="method-grid">
           <div><span>01</span><h3>兴趣画像</h3><p>近期保存、重复主题与显式标签权重更高；收藏不被误当作绝对偏好。</p></div>
-          <div><span>02</span><h3>来源边界</h3><p>仅保留近一年已核验的三大会主会中稿；新增 arXiv 依据摘要中的理论与实验证据自动初筛，绝不冒充录用结果。</p></div>
+          <div><span>02</span><h3>来源边界</h3><p>仅保留近一年已核验的三大会主会中稿；arXiv 由 Codex 阅读原始记录并按统一质量门槛筛选，绝不冒充录用结果。</p></div>
           <div><span>03</span><h3>去重排序</h3><p>排除 Zotero 已有标题，并在相关性、新鲜度、理论密度与主题多样性间平衡。</p></div>
         </div>
       </section>
 
       <footer>
         <div><span className="brand-mark small">P4Z</span><strong>Paper4ZCH Literature Radar</strong></div>
-        <p>每日轮换 3–5 篇 · 最近 7 天不重复 · 高质量候选不足时不凑数</p>
+        <p>按需由 Codex 手动更新 · 每次优先更换 3–5 篇 · 高质量候选不足时不凑数</p>
         {dismissed.size > 0 && <button onClick={() => { const empty = new Set<string>(); setDismissed(empty); persist("paper4zch-dismissed", empty); }}>恢复 {dismissed.size} 篇已隐藏论文</button>}
       </footer>
     </main>

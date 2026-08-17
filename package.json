@@ -14,7 +14,7 @@
     "test:pages": "node --test tests/github-pages.test.mjs",
     "test:cloud": "node --test tests/cloud-refresh.test.mjs",
     "refresh:cloud": "node scripts/cloud_refresh.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern gh-pages-dist",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

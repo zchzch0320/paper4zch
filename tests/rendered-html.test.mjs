@@ -20,10 +20,10 @@ test("server-renders the Paper4ZCH literature radar", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Paper4ZCH · 每日文献雷达<\/title>/i);
+  assert.match(html, /<title>Paper4ZCH · 个性化文献雷达<\/title>/i);
   assert.match(html, /从你的 Zotero 出发/);
   assert.match(html, /Hierarchical Multilevel Monte Carlo/);
-  assert.match(html, /今天真正值得你读的/);
+  assert.match(html, /本期真正值得你读的/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
 
